@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useState} from "react"
 import styled from "styled-components"
 
 const FormStyle = styled.form`
@@ -32,22 +32,37 @@ const FormStyle = styled.form`
 `
 function Form(props) {
 
+    const [formData, setFormData] = useState({
+        name: "",
+        email: "",
+        password: "",
+        terms: ""
+    })
+
+    const formInput = (event) => {
+        const newFormData = {
+            ...formData,
+            [event.target.name]: event.target.type === "checkbox" ? event.target.checked : event.target.value
+        }
+        setFormData(newFormData)
+    }
+
 
     return (
         <>
         
         <FormStyle>
             <label htmlFor = "name">Name </label>
-            <input type = "text" id = "name" name = "name"/>
+            <input onChange = {formInput} type = "text" id = "name" name = "name" value = {formData.name}/>
             <br/>
             <label htmlFor = "email">Email </label>
-            <input type = "text" id = "email" name = "email"/>
+            <input onChange = {formInput} type = "text" id = "email" name = "email" value = {formData.email}/>
             <br/>
             <label htmlFor = "password">Password </label>
-            <input type = "password" id = "password" name = "password"/>
+            <input onChange = {formInput} type = "password" id = "password" name = "password" value = {formData.password}/>
             <br/>
-            <input type = "checkbox" id = "terms" name = "terms"/>
-            <label hrmlFor = "terms" className = "checkbox-label">Do you agree to the terms of service?</label>
+            <input onChange = {formInput} type = "checkbox" id = "terms" name = "terms" checked = {formData.terms} />
+            <label htmlFor = "terms" className = "checkbox-label">Do you agree to the terms of service?</label>
             <br/>
             <button>Submit</button>
         </FormStyle>
