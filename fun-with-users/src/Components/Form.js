@@ -2,9 +2,10 @@ import React, {useState} from "react"
 import styled from "styled-components"
 import * as yup from "yup"
 
+//STYLES
 const FormStyle = styled.form`
-    * {
-        margin: 1% 0;
+    input, label, button {
+        margin-top: 2%;
     }
 
     button {
@@ -31,6 +32,13 @@ const FormStyle = styled.form`
 
 
 `
+
+const ErrorMessage = styled.p`
+    color: red;
+    font-size: 12px;
+    margin: 0;
+`
+
 function Form(props) {
     
     //FORM INPUT & SUBMIT FUNCTIONS
@@ -40,6 +48,7 @@ function Form(props) {
         password: "",
         terms: ""
     })
+
     const formInput = (event) => {
         const newFormData = {
             ...formData,
@@ -47,6 +56,7 @@ function Form(props) {
         }
         setFormData(newFormData)
     }
+
     const formSubmit = (event) => {
         event.preventDefault()
     }
@@ -69,6 +79,16 @@ function Form(props) {
             .oneOf([true],"Please agree to the terms and conditions.")
     })
 
+    //ERRORS STATE
+    const [errors, setErrors] = useState({
+        name: [""],
+        email: [""],
+        password: [""],
+        terms: [""]
+    })
+
+
+
 
 
     return (
@@ -77,16 +97,20 @@ function Form(props) {
         <FormStyle onSubmit = {formSubmit}>
             <label htmlFor = "name">Name </label>
             <input onChange = {formInput} type = "text" id = "name" name = "name" value = {formData.name}/>
-            <br/>
+            {errors.name.length > 0 ? <ErrorMessage>{errors.name[0]}</ErrorMessage> : <br/>}
+
             <label htmlFor = "email">Email </label>
             <input onChange = {formInput} type = "text" id = "email" name = "email" value = {formData.email}/>
-            <br/>
+            {errors.email.length > 0 ? <ErrorMessage>{errors.email[0]}</ErrorMessage> : <br/>}
+
             <label htmlFor = "password">Password </label>
             <input onChange = {formInput} type = "password" id = "password" name = "password" value = {formData.password}/>
-            <br/>
+            {errors.password.length > 0 ? <ErrorMessage>{errors.password[0]}</ErrorMessage> : <br/>}
+
             <input onChange = {formInput} type = "checkbox" id = "terms" name = "terms" checked = {formData.terms} />
             <label htmlFor = "terms" className = "checkbox-label">Do you agree to the terms of service?</label>
-            <br/>
+            {errors.terms.length > 0 ? <ErrorMessage>{errors.terms[0]}</ErrorMessage> : <br/>}
+
             <button>Submit</button>
         </FormStyle>
         </>
