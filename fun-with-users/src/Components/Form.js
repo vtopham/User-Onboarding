@@ -87,7 +87,26 @@ function Form(props) {
         terms: [""]
     })
 
+    //VALIDATING CHANGES
+    const validateChange = (event) => {
+        yup
+            .reach(formSchema, event.target.name)
+            .validate(event.target.name === "checkbox"? event.target.checked : event.target.value)
+            .then (valid => {
+                setErrors({
+                    ...errors,
+                    [event.target.name]: ""
+                })
+            })
+            .catch ( err => {
+                setErrors({
+                    ...errors,
+                    [event.target.name]: err.errors[0]
+                })
+            })
 
+            
+    }
 
 
 
@@ -111,7 +130,7 @@ function Form(props) {
             <label htmlFor = "terms" className = "checkbox-label">Do you agree to the terms of service?</label>
             {errors.terms.length > 0 ? <ErrorMessage>{errors.terms[0]}</ErrorMessage> : <br/>}
 
-            <button>Submit</button>
+            <button className = "disabled">Submit</button>
         </FormStyle>
         </>
     )
