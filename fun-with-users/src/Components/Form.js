@@ -3,6 +3,7 @@ import styled from "styled-components"
 import * as yup from "yup"
 import Axios from "axios"
 import {v4 as uuid} from "uuid"
+import UserCard from "./UserCard"
 
 
 //STYLES
@@ -176,7 +177,7 @@ function Form(props) {
             <button disabled = {buttonDisabled} >Submit</button>
 
             {users.map((user) => {
-                return <pre>{JSON.stringify(user, null, 2)}</pre>
+                return <UserCard user = {user}/>
             })}
         </FormStyle>
         </>
