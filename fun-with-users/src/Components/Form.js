@@ -2,6 +2,8 @@ import React, {useState, useEffect} from "react"
 import styled from "styled-components"
 import * as yup from "yup"
 import Axios from "axios"
+import {v4 as uuid} from "uuid"
+
 
 //STYLES
 const FormStyle = styled.form`
@@ -62,6 +64,8 @@ function Form(props) {
 
     const [post, setPost] = useState([])
 
+    const [users, setUsers] = useState([])
+
     //BUTTON STATUS
     useEffect(()=> {
         formSchema.isValid(formData).then(valid => {
@@ -88,6 +92,10 @@ function Form(props) {
             .post("https://reqres.in/api/users", formData)
             .then(res => {
                 setPost(res.data)
+                setUsers([
+                    ...users,
+                    res.data
+                ])
                 console.log("successfully submitted", post)
                 setFormData({
                         name: "",
@@ -99,6 +107,8 @@ function Form(props) {
             .catch(err => {
                 console.log(err.response)
             })
+
+        console.log(post);
     }
 
     //SCHEMA FOR VALIDATION
@@ -164,6 +174,10 @@ function Form(props) {
             {errors.terms.length > 0 ? <ErrorMessage>{errors.terms}</ErrorMessage> : <br/>}
 
             <button disabled = {buttonDisabled} >Submit</button>
+
+            {users.map((user) => {
+                return <pre>{JSON.stringify(user, null, 2)}</pre>
+            })}
         </FormStyle>
         </>
     )
