@@ -1,4 +1,4 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import styled from "styled-components"
 import * as yup from "yup"
 
@@ -22,8 +22,7 @@ const FormStyle = styled.form`
     .disabled {
         background: lightgray;
         border: none;
-        box-shadow: none;
-        
+        box-shadow: none; 
     }
 
     .checkbox-label {
@@ -40,15 +39,34 @@ const ErrorMessage = styled.p`
 `
 
 function Form(props) {
-    
-    //FORM INPUT & SUBMIT FUNCTIONS
+
+    //STATES
+
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
-        terms: ""
+        terms: false
     })
 
+    
+    const [errors, setErrors] = useState({
+        name: [""],
+        email: [""],
+        password: [""],
+        terms: [""]
+    })
+
+    const [buttonDisabled, setButtonDisabled] = useState(true)
+
+    //BUTTON STATUS
+    useEffect(()=> {
+        formSchema.isValid(formData).then(valid => {
+            setButtonDisabled(!valid)
+        })
+    },[formData])
+    
+    //FORM INPUT & SUBMIT FUNCTIONS
     const formInput = (event) => {
         event.persist()
         const newFormData = {
@@ -61,6 +79,7 @@ function Form(props) {
 
     const formSubmit = (event) => {
         event.preventDefault()
+        console.log("submitted")
     }
 
     //SCHEMA FOR VALIDATION
@@ -81,27 +100,21 @@ function Form(props) {
             .oneOf([true],"Please agree to the terms and conditions.")
     })
 
-    //ERRORS STATE
-    const [errors, setErrors] = useState({
-        name: [""],
-        email: [""],
-        password: [""],
-        terms: [""]
-    })
+    
 
     //VALIDATING CHANGES
     const validateChange = (event) => {
         yup
             .reach(formSchema, event.target.name)
-            .validate(event.target.name === "checkbox" ? event.target.checked : event.target.value)
+            .validate(event.target.name === "terms" ? event.target.checked : event.target.value)
             .then (valid => {
+                
                 setErrors({
                     ...errors,
                     [event.target.name]: ""
                 })
             })
             .catch ( err => {
-                console.log(event.target);
                 setErrors({
                     ...errors,
                     [event.target.name]: err.errors[0]
@@ -131,7 +144,7 @@ function Form(props) {
             <label htmlFor = "terms" className = "checkbox-label">Do you agree to the terms of service?</label>
             {errors.terms.length > 0 ? <ErrorMessage>{errors.terms}</ErrorMessage> : <br/>}
 
-            <button className = "disabled">Submit</button>
+            <button disabled = {buttonDisabled} >Submit</button>
         </FormStyle>
         </>
     )
