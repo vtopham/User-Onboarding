@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react"
 import styled from "styled-components"
 import * as yup from "yup"
+import Axios from "axios"
 
 //STYLES
 const FormStyle = styled.form`
@@ -59,6 +60,8 @@ function Form(props) {
 
     const [buttonDisabled, setButtonDisabled] = useState(true)
 
+    const [post, setPost] = useState([])
+
     //BUTTON STATUS
     useEffect(()=> {
         formSchema.isValid(formData).then(valid => {
@@ -80,6 +83,22 @@ function Form(props) {
     const formSubmit = (event) => {
         event.preventDefault()
         console.log("submitted")
+
+        Axios
+            .post("https://reqres.in/api/users", formData)
+            .then(res => {
+                setPost(res.data)
+                console.log("successfully submitted", post)
+                setFormData({
+                        name: "",
+                        email: "",
+                        password: "",
+                        terms: false
+                })
+            })
+            .catch(err => {
+                console.log(err.response)
+            })
     }
 
     //SCHEMA FOR VALIDATION
