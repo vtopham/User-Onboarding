@@ -1,5 +1,6 @@
 import React, {useState} from "react"
 import styled from "styled-components"
+import * as yup from "yup"
 
 const FormStyle = styled.form`
     * {
@@ -31,14 +32,14 @@ const FormStyle = styled.form`
 
 `
 function Form(props) {
-
+    
+    //FORM INPUT & SUBMIT FUNCTIONS
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         password: "",
         terms: ""
     })
-
     const formInput = (event) => {
         const newFormData = {
             ...formData,
@@ -46,12 +47,34 @@ function Form(props) {
         }
         setFormData(newFormData)
     }
+    const formSubmit = (event) => {
+        event.preventDefault()
+    }
+
+    //SCHEMA FOR VALIDATION
+    const formSchema = yup.object().shape({
+        name: yup
+            .string()
+            .required("Please enter your name."),
+        email: yup
+            .string()
+            .email("Please enter a valid email.")
+            .required("Please enter an email address."),
+        password: yup
+            .string()
+            .min(6,"Your password must include at least 6 characters.")
+            .required("Please include a password."),
+        terms: yup
+            .boolean()
+            .oneOf([true],"Please agree to the terms and conditions.")
+    })
+
 
 
     return (
         <>
         
-        <FormStyle>
+        <FormStyle onSubmit = {formSubmit}>
             <label htmlFor = "name">Name </label>
             <input onChange = {formInput} type = "text" id = "name" name = "name" value = {formData.name}/>
             <br/>
