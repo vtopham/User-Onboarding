@@ -50,10 +50,12 @@ function Form(props) {
     })
 
     const formInput = (event) => {
+        event.persist()
         const newFormData = {
             ...formData,
             [event.target.name]: event.target.type === "checkbox" ? event.target.checked : event.target.value
         }
+        validateChange(event)
         setFormData(newFormData)
     }
 
@@ -91,7 +93,7 @@ function Form(props) {
     const validateChange = (event) => {
         yup
             .reach(formSchema, event.target.name)
-            .validate(event.target.name === "checkbox"? event.target.checked : event.target.value)
+            .validate(event.target.name === "checkbox" ? event.target.checked : event.target.value)
             .then (valid => {
                 setErrors({
                     ...errors,
@@ -99,13 +101,12 @@ function Form(props) {
                 })
             })
             .catch ( err => {
+                console.log(event.target);
                 setErrors({
                     ...errors,
                     [event.target.name]: err.errors[0]
                 })
             })
-
-            
     }
 
 
@@ -116,19 +117,19 @@ function Form(props) {
         <FormStyle onSubmit = {formSubmit}>
             <label htmlFor = "name">Name </label>
             <input onChange = {formInput} type = "text" id = "name" name = "name" value = {formData.name}/>
-            {errors.name.length > 0 ? <ErrorMessage>{errors.name[0]}</ErrorMessage> : <br/>}
+            {errors.name.length > 0 ? <ErrorMessage>{errors.name}</ErrorMessage> : <br/>}
 
             <label htmlFor = "email">Email </label>
             <input onChange = {formInput} type = "text" id = "email" name = "email" value = {formData.email}/>
-            {errors.email.length > 0 ? <ErrorMessage>{errors.email[0]}</ErrorMessage> : <br/>}
+            {errors.email.length > 0 ? <ErrorMessage>{errors.email}</ErrorMessage> : <br/>}
 
             <label htmlFor = "password">Password </label>
             <input onChange = {formInput} type = "password" id = "password" name = "password" value = {formData.password}/>
-            {errors.password.length > 0 ? <ErrorMessage>{errors.password[0]}</ErrorMessage> : <br/>}
+            {errors.password.length > 0 ? <ErrorMessage>{errors.password}</ErrorMessage> : <br/>}
 
             <input onChange = {formInput} type = "checkbox" id = "terms" name = "terms" checked = {formData.terms} />
             <label htmlFor = "terms" className = "checkbox-label">Do you agree to the terms of service?</label>
-            {errors.terms.length > 0 ? <ErrorMessage>{errors.terms[0]}</ErrorMessage> : <br/>}
+            {errors.terms.length > 0 ? <ErrorMessage>{errors.terms}</ErrorMessage> : <br/>}
 
             <button className = "disabled">Submit</button>
         </FormStyle>
