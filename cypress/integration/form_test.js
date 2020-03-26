@@ -21,5 +21,10 @@ describe("this is a block of tests", function () {
         cy.get('input[name = "terms"]') //type and check the checkbox
         .check()
         .should("be.checked", "true");
+
+        cy.get("button") //submits data
+        .should("not.be.disabled")
+        .click();
+        
     })
 })
