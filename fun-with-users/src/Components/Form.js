@@ -158,13 +158,14 @@ function Form(props) {
         <>
         
         <FormStyle onSubmit = {formSubmit}>
+
             <label htmlFor = "name">Name </label>
             <input onChange = {formInput} type = "text" id = "name" name = "name" value = {formData.name}/>
             {errors.name.length > 0 ? <ErrorMessage>{errors.name}</ErrorMessage> : <br/>}
 
             <label htmlFor = "email">Email </label>
             <input onChange = {formInput} type = "text" id = "email" name = "email" value = {formData.email}/>
-            {errors.email.length > 0 ? <ErrorMessage>{errors.email}</ErrorMessage> : <br/>}
+            {errors.email.length > 0 ? <ErrorMessage data-cy = "errorEmail">{errors.email}</ErrorMessage> : <br/>}
 
             <label htmlFor = "password">Password </label>
             <input onChange = {formInput} type = "password" id = "password" name = "password" value = {formData.password}/>

@@ -10,8 +10,15 @@ describe("this is a block of tests", function () {
         .type("Victoria")
         .should("have.value", "Victoria");
 
-        cy.get('input[name = "email"]') //type and check email
-        .type("victoria@gmail.com")
+        cy.get('input[name = "email"]') //type and check email that FAILS
+        .type("victoria");
+
+        cy.get("[data-cy = errorEmail]")
+        .its('length')
+        .should('be.gt', 0)
+
+        cy.get('input[name = "email"]') //type and check email that passes
+        .type("@gmail.com")
         .should("have.value", "victoria@gmail.com");
 
         cy.get('input[name = "password"]') //type and check password
